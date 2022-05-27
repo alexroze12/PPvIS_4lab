@@ -1,0 +1,202 @@
+<PinScreen>
+    MDBoxLayout:
+        padding: 20,200
+        spacing:40
+        MDTextFieldRound:
+            id: pin
+            hint_text:"enter your pin"
+        Button:
+            text:"OK"
+            pos_hint:{'x':0.35,'y':0}
+            font_size:15
+            size_hint:0.15,0.15
+            on_press: root.enter_pin()
+    MDFloatLayout:
+        Button:
+            id: bank
+            text:"call"
+            pos_hint:{'x':0.9,'y':0}
+            font_size:12
+            size_hint:0.07,0.07
+            on_press: root.unlock_your_card()
+
+<GeneralScreen>
+    BoxLayout
+        orientation: 'horizontal'
+        padding: 20, 250
+        spacing: 20
+        Button:
+            text:"Check the balance"
+            on_press: root.manager.current = 'card balance'
+        Button:
+            text:"To pay the telephone bill"
+            on_press: root.manager.current = 'telephone bill'
+        Button:
+            text:"Add new banknotes"
+            on_press: root.manager.current = 'add new banknotes'
+
+        Button:
+            text:"Withdrawal money"
+            on_press: root.manager.current = 'withdrawal'
+    MDFloatLayout:
+        Button:
+            text:"exit"
+            pos_hint:{'center_x':0.5,'y':0}
+            font_size:12
+            size_hint:0.07,0.07
+            on_press: root.complete_the_program()
+
+<WithdrawalMoney>
+    MDFloatLayout:
+        Button:
+            text:"home"
+            pos_hint:{'left_x':1,'y':0}
+            font_size:10
+            size_hint:0.07,0.07
+            on_press: root.manager.current = 'menu'
+    MDBoxLayout:
+        padding: 20,50
+        spacing:40
+        MDTextFieldRound:
+            id: nominal
+            hint_text:"nominal"
+        MDTextFieldRound:
+            id: amount
+            hint_text:"amount"
+    MDFloatLayout:
+        Button:
+            text:"Update"
+            pos_hint:{'center_x':0.5,'y':0}
+            font_size:10
+            size_hint:0.07,0.07
+            on_press:root.withdrawal_money()
+    BoxLayout:
+        Button:
+            id:amount_of_withdrawal
+            text:"amount_of_withdrawal"
+            pos_hint:{'center_x':0.9,'top':0.25}
+            font_size:15
+            size_hint:0.1,0.1
+            spacing:50
+            # on_press: root.delete_information()
+        Button:
+            id:remainder_amount_of_withdrawal
+            text:"remainder_amount_of_withdrawal"
+            pos_hint:{'center_x':0,'top':0.25}
+            font_size:15
+            size_hint:0.1,0.1
+            #on_press: root.delete_information()
+    MDBoxLayout:
+        padding: 20,200
+        spacing:40
+        MDTextFieldRound:
+            id: withdrawal
+            hint_text:"amount of withdrawal"
+        Button:
+            text:"OK"
+            pos_hint:{'x':0.35,'y':0}
+            font_size:15
+            size_hint:0.15,0.15
+            on_press: root.amount_of_withdrawal_money()
+
+
+<CheckTheCardBalance>
+    MDFloatLayout:
+        Button:
+            text:"home"
+            pos_hint:{'left_x':1,'y':0}
+            font_size:10
+            size_hint:0.07,0.07
+            on_press: root.manager.current = 'menu'
+    MDFloatLayout:
+        Button:
+            id: card_balance
+            text:"card_balance"
+            pos_hint:{'left_x':0.5,'y':0.3}
+            font_size:15
+            size_hint:0.2,0.1
+            on_press: root.manager.current = 'menu'
+        Button:
+            text:"view"
+            pos_hint:{'x':0.8,'y':0.3}
+            font_size:15
+            size_hint:0.1,0.1
+            on_press: root.view_card_balance()
+
+<PayTheTelephoneBill>
+    MDBoxLayout:
+        padding: 20,220
+        spacing:40
+    MDFloatLayout:
+        Button:
+            text:"home"
+            pos_hint:{'left_x':1,'y':0}
+            font_size:10
+            size_hint:0.07,0.07
+            on_press: root.manager.current = 'menu'
+        Button:
+            id: telephone_balance
+            text:"telephone_balance"
+            pos_hint:{'left_x':1,'y':0.8}
+            font_size:15
+            size_hint:0.2,0.1
+
+        Button:
+            text:"view"
+            pos_hint:{'x':0.7,'y':0.8}
+            font_size:15
+            size_hint:0.1,0.1
+            on_press: root.view_telephone_balance()
+        Button:
+            id:card_balance
+            text:"card_balance"
+            pos_hint:{'left_x':1,'y':0.6}
+            font_size:15
+            size_hint:0.2,0.1
+
+        Button:
+            text:"view"
+            pos_hint:{'x':0.7,'y':0.6}
+            font_size:15
+            size_hint:0.1,0.1
+            on_press: root.view_card_balance()
+    MDBoxLayout:
+        padding: 20,150
+        spacing:40
+        MDTextFieldRound:
+            id: update_telephone_account
+            hint_text:"amount to update telephone balance"
+        Button:
+            text:"OK"
+            pos_hint:{'x':0.35,'y':0}
+            font_size:15
+            size_hint:0.15,0.15
+            on_press: root.update_telephone_balance()
+
+<AddBanknotes>
+    MDFloatLayout:
+        Button:
+            text:"home"
+            pos_hint:{'left_x':1,'y':0}
+            font_size:10
+            size_hint:0.07,0.07
+            on_press: root.manager.current = 'menu'
+    MDBoxLayout:
+        padding: 20,550
+        spacing:40
+        MDTextFieldRound:
+            id: nominal
+            hint_text:"nominal"
+        MDTextFieldRound:
+            id: amount
+            hint_text:"amount"
+    MDFloatLayout:
+        Button:
+            text:"Update"
+            pos_hint:{'center_x':0.5,'y':0.8}
+            font_size:10
+            size_hint:0.07,0.07
+            on_press:root.add_new_banknotes_to_storage()
+
+
+
