@@ -74,4 +74,14 @@ def digit_validate(amount: str):
         return False
 
 
+def banknote_validate(banknote: str):
+    with open("Utility/storage_of_banknotes.json", "r") as read_file:
+        storage_information = read_file.read()
+    storage = json.loads(storage_information)
+    t = list(storage.keys())
+    for i in range(0, len(t)):
+        if banknote == t[i]:
+            return True
+        else:
+            continue
 

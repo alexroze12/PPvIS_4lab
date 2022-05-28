@@ -11,7 +11,7 @@ from Model.Bank import Bank
 from Model.Card_account import CardAccount
 from Model.Storage_of_banknotes import StorageOfBanknotes
 from Model.Telephone import TelephoneBill
-from Controller.controller import pin_validate, digit_validate
+from Controller.controller import pin_validate, digit_validate, banknote_validate
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), "my_screen.kv"))
 
@@ -104,22 +104,29 @@ class WithdrawalMoney(TemplateTable, Screen):
         self.ids.amount_of_withdrawal.text = str(self.ids.withdrawal.text)
         self.ids.remainder_amount_of_withdrawal.text = str(
             Controller(CardAccount()).from_json_information_about_card("remaining_amount_to_withdrawal"))
-        remainder_amount_of_banknotes = Controller(StorageOfBanknotes()).from_json_storage_balance(
-            self.ids.nominal.text)
-        amount_of_nominal_money = Controller(StorageOfBanknotes()).from_json_storage_balance(self.ids.nominal.text)
-        if digit_validate(self.ids.amount.text) and digit_validate(self.ids.nominal.text):
-            if Controller(StorageOfBanknotes()).from_json_storage_balance(self.ids.nominal.text) - int(
-                    self.ids.amount.text) >= 0 and int(self.ids.withdrawal.text) - (
-                    int(self.ids.nominal.text) * int(self.ids.amount.text)) >= 0:
-                Controller(CardAccount()).withdrawal(int(card_balance), int(self.amount), int(self.ids.nominal.text),
-                                                     int(self.ids.amount.text), int(summary_withdrawal_money),
-                                                     int(remainder_amount_of_banknotes))
-                self.ids.remainder_amount_of_withdrawal.text = str(
-                    Controller(CardAccount()).from_json_information_about_card("remaining_amount_to_withdrawal"))
-                self.amount = Controller(CardAccount()).from_json_information_about_card(
-                    "remaining_amount_to_withdrawal")
+        if banknote_validate(self.ids.nominal.text):
+            remainder_amount_of_banknotes = Controller(StorageOfBanknotes()).from_json_storage_balance(
+                self.ids.nominal.text)
+            amount_of_nominal_money = Controller(StorageOfBanknotes()).from_json_storage_balance(self.ids.nominal.text)
+            if digit_validate(self.ids.amount.text) and digit_validate(self.ids.nominal.text):
+                if Controller(StorageOfBanknotes()).from_json_storage_balance(self.ids.nominal.text) - int(
+                        self.ids.amount.text) >= 0 and int(self.ids.withdrawal.text) - (
+                        int(self.ids.nominal.text) * int(self.ids.amount.text)) >= 0:
+                    Controller(CardAccount()).withdrawal(int(card_balance), int(self.amount), int(self.ids.nominal.text),
+                                                        int(self.ids.amount.text), int(summary_withdrawal_money),
+                                                        int(remainder_amount_of_banknotes))
+                    self.ids.remainder_amount_of_withdrawal.text = str(
+                        Controller(CardAccount()).from_json_information_about_card("remaining_amount_to_withdrawal"))
+                    self.amount = Controller(CardAccount()).from_json_information_about_card(
+                        "remaining_amount_to_withdrawal")
+                else:
+                    self.ids.amount.text = "Choose other banknotes or another amount!"
+                    self.ids.amount_of_withdrawal.text = "Error!"
+                    self.ids.remainder_amount_of_withdrawal.text = "Error!"
+
             else:
-                self.ids.amount.text = "Choose other banknotes or another amount!"
+                self.ids.amount.text = "Enter correct data!"
+                self.ids.nominal.text = "Enter correct data!"
                 self.ids.amount_of_withdrawal.text = "Error!"
                 self.ids.remainder_amount_of_withdrawal.text = "Error!"
 
