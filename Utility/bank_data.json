@@ -1,0 +1,27 @@
+{
+     "bank_telephone": 147,
+     "card_number": 1234567812345678,
+     "password": 1234,
+     "attempts": 0,
+     "status": "unlocked",
+     "remaining_amount_to_withdrawal": 0,
+     "balance": 170,
+     "telephone_balance": 8600,
+     "withdrawal": 0,
+     "storage": {
+          "50": 6,
+          "2": 12,
+          "300": 7,
+          "1": 300,
+          "500": 8,
+          "200": 3,
+          "100": 0,
+          "20": 29,
+          "3": 100,
+          "1000": 3,
+          "10": 97,
+          "190": 10,
+          "210": 10,
+          "120": 12
+     }
+}

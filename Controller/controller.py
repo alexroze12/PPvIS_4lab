@@ -1,87 +1,109 @@
-import json
+from Model.Bank import Bank
+from Model.Telephone import TelephoneBill
+from Model.Card_account import CardAccount
+from Model.Storage_of_banknotes import StorageOfBanknotes
 
 
 class Controller:
-    def __init__(self, model):
-        self.model = model
+    def __init__(self):
+        pass
 
-    def from_json_information_about_card(self, pattern_to_search):
-        return self.model.from_json_read_information_about_card(pattern_to_search)
+    @staticmethod
+    def get_information_about_card_balance():
+        return CardAccount.get_information_about_card("balance")
 
-    def write_to_json_information_about_card(self, pattern_to_search, component):
-        self.model.to_json_write_information_about_card(pattern_to_search, component)
+    @staticmethod
+    def get_information_about_card_status():
+        return CardAccount.get_information_about_card("status")
 
-    def write_to_json_information_about_card_status(self, pattern_to_search, component):
-        self.model.to_json_write_information_about_card_status(pattern_to_search, component)
+    @staticmethod
+    def get_information_about_card_attempts():
+        return CardAccount.get_information_about_card("attempts")
 
-    def from_json_storage_of_banknotes(self):
-        with open("Utility/storage_of_banknotes.json", "r") as read_file:
-            storage_information = read_file.read()
-        storage = json.loads(storage_information)
-        return list(storage.items())
+    @staticmethod
+    def get_information_about_card_withdrawal():
+        return CardAccount.get_information_about_card("withdrawal")
 
-    def from_json_storage_balance(self, nominal):
-        return self.model.from_json_read_storage_balance(nominal)
+    @staticmethod
+    def get_information_about_card_number():
+        return CardAccount.get_information_about_card("card_number")
 
-    def write_to_json_storage_balance(self, nominal, update_banknote):
-        self.model.to_json_write_storage_balance(nominal, update_banknote)
+    @staticmethod
+    def get_information_about_remaining_amount_to_withdrawal():
+        return CardAccount.get_information_about_card("remaining_amount_to_withdrawal")
 
-    def withdrawal(self, balance_of_card, withdrawal_amount_of_money, nominal, amount_of_banknotes,
-                       summary_withdrawal_money, remainder_amount_in_storage_of_banknotes):
-        self.model.withdrawal_amount_of_money(balance_of_card, withdrawal_amount_of_money, nominal, amount_of_banknotes,
-                                              summary_withdrawal_money, remainder_amount_in_storage_of_banknotes)
+    @staticmethod
+    def get_information_about_bank_telephone():
+        return Bank.get_information_about_bank()
 
-    def add_banknotes(self, nominal, amount):
-        self.model.add_new_banknotes(nominal, amount)
+    @staticmethod
+    def get_information_about_telephone_balance():
+        return TelephoneBill.get_information_about_telephone()
 
-    def pay_telephone(self, amount_of_money):
-        return self.model.pay_telephone_account(amount_of_money)
+    @staticmethod
+    def get_information_about_storage_of_banknotes():
+        return StorageOfBanknotes.get_storage_balance()
 
-    def update_card_balance_after_increase_telephone_account(self, amount_of_money):
-        if self.model.balance - int(amount_of_money) >= 0:
-            self.model.balance = self.model.balance - int(amount_of_money)
-            return self.model.balance
-        else:
-            pass
+    @staticmethod
+    def set_information_about_card_status(status):
+        return CardAccount.set_information_about_card("status", status, False)
 
-    def card_balance_validate(self):
-        if self.model.balance == 0:
-            return False
-        else:
+    @staticmethod
+    def set_information_about_card_attempts(attempts):
+        return CardAccount.set_information_about_card("attempts", attempts, True)
+
+    @staticmethod
+    def set_information_about_card_withdrawal(withdrawal):
+        return CardAccount.set_information_about_card("withdrawal", withdrawal, True)
+
+    @staticmethod
+    def pin_validate(pin: str):
+        password = CardAccount.get_information_about_card("password")
+        status = CardAccount.get_information_about_card("status")
+        if len(pin) == 4 and pin.isdigit() and pin == str(password) and status == "unlocked":
             return True
-
-    def from_json_information_about_telephone(self, pattern_to_search):
-        return self.model.from_json_read_information_about_telephone(pattern_to_search)
-
-    def from_json_information_about_bank(self, pattern_to_search):
-        return self.model.from_json_read_information_about_bank(pattern_to_search)
-
-    def write_to_json_telephone_balance(self, pattern_to_search, update_summary):
-        self.model.to_json_write_telephone_balance(pattern_to_search, update_summary)
-
-
-def pin_validate(pin: str, password, status):
-    if len(pin) == 4 and pin.isdigit() and pin == str(password) and status == "unlocked":
-        return True
-    else:
         return False
 
-
-def digit_validate(amount: str):
-    if amount.isdigit():
-        return True
-    else:
+    @staticmethod
+    def banknote_validate(banknote: str):
+        storage = CardAccount.get_information_about_card("storage")
+        if banknote in list(storage.keys()):
+            return True
         return False
 
-
-def banknote_validate(banknote: str):
-    with open("Utility/storage_of_banknotes.json", "r") as read_file:
-        storage_information = read_file.read()
-    storage = json.loads(storage_information)
-    t = list(storage.keys())
-    for i in range(0, len(t)):
-        if banknote == t[i]:
+    @staticmethod
+    def digit_validate(amount: str):
+        if amount.isdigit():
             return True
-        else:
-            continue
+        return False
 
+    @staticmethod
+    def amount_of_withdrawal_money(amount_to_withdrawal):
+        if Controller.digit_validate(amount_to_withdrawal):
+            return CardAccount.amount_of_withdrawal_money(amount_to_withdrawal)
+        return "Error"
+
+    @staticmethod
+    def withdrawal_money(nominal, amount):
+        if Controller.banknote_validate(nominal) and Controller.digit_validate(nominal) and Controller.digit_validate(
+                amount):
+            return CardAccount.withdrawal_money(nominal, amount)
+        return "Error"
+
+    @staticmethod
+    def pay_telephone_account(amount_of_money):
+        if Controller.digit_validate(amount_of_money):
+            return TelephoneBill.pay_telephone_account(amount_of_money)
+        return "Error"
+
+    @staticmethod
+    def add_new_banknote(nominal, amount):
+        if Controller.digit_validate(nominal) and Controller.digit_validate(amount):
+            StorageOfBanknotes.set_nominal_storage_balance(nominal, int(amount))
+            return "Correct"
+        return "Error"
+
+    @staticmethod
+    def unlock_your_card():
+        CardAccount.set_information_about_card("attempts", 0, True)
+        CardAccount.set_information_about_card("status", "unlocked", False)
